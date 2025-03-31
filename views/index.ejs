@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <link href="./styles/src/output.css" rel="stylesheet">
+</head>
+<body class="bg-neutral-900">
+
+    <!-- Header -->
+    <header>
+      <div class="border-b-amber-300 border-b-2 flex flex-row justify-between items-center h-30 p-5 bg-neutral-950 text-white font-semibold">
+          <img src="Logo.jpeg" alt="Mayorgraphix Media House Ltd Logo" class="h-20 w-32">
+          <h1 class="text-3xl font-bold text-center sm:text-left">MEDIA BLOG</h1>
+          <div class="justify-center py-5 m-5">
+              <button class="border border-amber-300 font-bold rounded-lg px-4 py-2 text-white hover:bg-amber-300 hover:text-amber-100">
+                  <a href="/">HOME</a>
+              </button>
+          </div>
+      </div>
+  </header>
+  
+  
+
+    <!-- Main Content -->
+    <main>
+        <div class="bg-neutral-900 text-white p-5 min-h-screen">
+            <div class="border border-neutral-800 bg-neutral-800 flex flex-col items-center font-bold rounded-2xl p-7 m-7 h-full">
+                <ul class="w-full">
+                    <% if (Array.isArray(posts) && posts.length > 0) { %>
+                        <% posts.forEach(post => { %>
+                            <li class="p-5 w-full">
+                                <h2 class="pb-5 text-3xl font-extrabold"><%= post.title %></h2>
+                                <div class="p-5"><p><%= post.content %></p></div>
+                                <% if (post.image) { %>
+                                    <img class="w-full" src="<%= post.image %>" alt="Post Image" width="200">
+                                <% } %>
+                            </li>
+                        <% }) %>
+                    <% } else { %>
+                        <li>No posts available</li>
+                    <% } %>
+                </ul>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination mt-5 text-center">
+                <% if (currentPage > 1) { %>
+                    <a href="?page=<%= currentPage - 1 %>" class="px-4 py-2 border rounded-lg bg-gray-800 hover:bg-gray-700">Previous</a>
+                <% } %>
+                <span class="px-4 py-2">Page <%= currentPage %> of <%= totalPages %></span>
+                <% if (currentPage < totalPages) { %>
+                    <a href="?page=<%= currentPage + 1 %>" class="px-4 py-2 border rounded-lg bg-gray-800 hover:bg-gray-700">Next</a>
+                <% } %>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="border-t-amber-300 border-t-2 flex flex-row justify-between items-center p-5 bg-neutral-950 text-white font-semibold">
+          <p class="text-center sm:text-left">
+              © 1998-2025 Mayorgraphix Media House Ltd | All Rights Reserved.
+          </p>
+          <div class="flex items-center justify-between space-x-7">
+              <p class="hidden sm:block">Contact Us</p>
+              <nav>
+                <ul class="flex space-x-5">
+                    <li>
+                        <a href="https://www.facebook.com/mayorgraphixmediahouse" target="_blank">
+                            <img src="./images/facebook.png" alt="Facebook" class="w-6 h-6">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.instagram.com/mayorgraphixmediahouse" target="_blank">
+                            <img src="./images/instagram.png" alt="Instagram" class="w-6 h-6">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.twitter.com/mayorgraphixmediahouse" target="_blank">
+                            <img src="./images/x.png" alt="Twitter" class="w-6 h-6">
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+          </div>
+      </div>
+  </footer>
+  
+
+</body>
+</html>

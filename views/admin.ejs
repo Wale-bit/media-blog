@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link href="./styles/src/output.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="border-b-amber-300 border-b-2 flex flex-row justify-between items-center p-5 h-30 bg-neutral-950 text-white font-semibold">
+            <img src="Logo.jpeg" alt="Mayorgraphix Media House Ltd Logo" width="140" height="86" class="h-20 w-32 align-center">
+            <h1 class="text-3xl font-bold">MEDIA BLOG</h1>
+            <div class="justify-center py-5 m-5"><button class="border border-amber-300 font-bold rounded-lg px-4 py-2 text-white hover:bg-amber-300 hover:text-amber-100"><a href="/">HOME</a></button>
+            </div>
+        </div>
+    </header>
+    <div class="bg-neutral-900 text-white p-5 flex justify-center items-center w-full">
+        <div class="flex flex-col justify-center items-center  text-white font-bold rounded-2xl p-7">
+            <h2 class="font-bold text-3xl pb-5 mb-5">Create a New Post</h2>
+            <form action="/posts" method="POST" enctype="multipart/form-data" class="flex flex-col items-center">
+                <input type="text" class="border rounded-lg relative px-2 py-3 mb-5 w-full" name="title" placeholder="Title" required>
+                <textarea name="content" class="border rounded-lg relative px-2 py-3 mb-5 w-full h-full" placeholder="Content" required></textarea>
+                <input type="file" class="border font-bold rounded-lg px-4 py-2 mb-5 hover:bg-amber-300" name="image" accept="image/*">
+                <button class="border border-amber-300 font-bold rounded-lg px-4 py-2 text-white hover:bg-amber-300 hover:text-amber-100" type="submit">Create Post</button>
+            </form>
+        </div>
+        
+    </div>
+    <div class="bg-neutral-900 text-white p-5 flex flex-col items-center w-full">
+        <h2 class="font-bold text-3xl pb-5 mb-5">Existing Posts</h2>
+        <ul>
+            <% if (Array.isArray(posts) && posts.length > 0) { %>
+              <% posts.forEach(post => { %>
+                <li>
+                  <h2 class="font-bold text-3xl pb-5 pt-5"><%= post.title %></h2>
+                  <p class="text-lg pb-5 pt-5"><%= post.content %></p>
+                  <% if (post.image) { %>
+                    <img class="w-full" src="data:image/jpeg;base64,<%= post.image %>" alt="Post Image" width="200">
+                <% } %>
+                  <form action="/posts" method="POST" enctype="multipart/form-data" class="flex flex-col items-center">
+                    <input type="text" class="border rounded-lg relative px-2 py-3 mb-5 w-full" name="title" value="<%= post.title %>" required>
+                    <textarea name="content" class="border rounded-lg relative px-2 py-3 mb-5 w-full h-full" required><%= post.content %></textarea>
+                    <input type="file" class="border font-bold rounded-lg px-4 py-2 mb-5 mt-5 hover:bg-amber-300" name="image" accept="image/*">
+                    <div class="flex flex-row justify-between w-full">
+                      <button class="border border-amber-300 font-bold rounded-lg px-4 py-2 text-white hover:bg-amber-300 hover:text-amber-100" type="submit">Edit</button>
+                  </form>
+                  <form action="/posts/<%= post.id %>/delete" method="POST">
+                    <button class="border border-amber-300 font-bold rounded-lg px-4 py-2 text-white hover:bg-amber-300 hover:text-amber-100" type="submit">Delete</button>
+                  </form>
+                </li>
+              <% }) %>
+            <% } else { %>
+              <li>No posts available</li>
+            <% } %>
+          </ul>
+          <div class="pagination mt-5">
+            <% if (currentPage > 1) { %>
+              <a href="?page=<%= currentPage - 1 %>" class="px-4 py-2 border rounded-lg bg-gray-800 hover:bg-gray-700">Previous</a>
+            <% } %>
+          
+            <span class="px-4 py-2">Page <%= currentPage %> of <%= totalPages %></span>
+          
+            <% if (currentPage < totalPages) { %>
+              <a href="?page=<%= currentPage + 1 %>" class="px-4 py-2 border rounded-lg bg-gray-800 hover:bg-gray-700">Next</a>
+            <% } %>
+          </div>
+    </div>
+    
+    
+    <footer>
+        <div class=" border-t-amber-300 border-t-2 flex flex-row justify-between items-center p-5 h-30 bg-neutral-950 text-white font-semibold">
+            <p>
+                © 1998-2025 Mayorgraphix Media House Ltd | All Rights Reserved.
+            </p>
+            <div class="bg-neutral-950 text-white font-semibold flex flex-row items-center justify-between space-x-7">
+                <p>
+                    Contact Us
+                </p>
+                <nav>
+                  <ul class="flex space-x-5">
+                      <li>
+                          <a href="https://www.facebook.com/mayorgraphixmediahouse" target="_blank">
+                              <img src="./images/facebook.png" alt="Facebook" class="w-6 h-6">
+                          </a>
+                      </li>
+                      <li>
+                          <a href="https://www.instagram.com/mayorgraphixmediahouse" target="_blank">
+                              <img src="./images/instagram.png" alt="Instagram" class="w-6 h-6">
+                          </a>
+                      </li>
+                      <li>
+                          <a href="https://www.twitter.com/mayorgraphixmediahouse" target="_blank">
+                              <img src="./images/x.png" alt="Twitter" class="w-6 h-6">
+                          </a>
+                      </li>
+                  </ul>
+              </nav>
+              
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
