@@ -7,6 +7,9 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import dotenv from 'dotenv';
+
+dotenv.config(); // Load environment variables
 
 // Setup file paths
 const __filename = fileURLToPath(import.meta.url);
@@ -38,6 +41,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// Use API_BASE_URL from environment variables
+const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:4000';
+
 // Routes
 
 // Serve static HTML pages
@@ -51,7 +57,7 @@ backend.get('/blog', async (req, res) => {
   const limit = 5;
 
   try {
-    const response = await fetch(`http://localhost:4000/posts?page=${page}&limit=${limit}`);
+    const response = await fetch(`${apiBaseUrl}/posts?page=${page}&limit=${limit}`);
     if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
 
     const data = await response.json();
@@ -72,7 +78,7 @@ backend.get('/admin', async (req, res) => {
   const limit = 5;
 
   try {
-    const response = await fetch(`http://localhost:4000/posts?page=${page}&limit=${limit}`);
+    const response = await fetch(`${apiBaseUrl}/posts?page=${page}&limit=${limit}`);
     if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
 
     const data = await response.json();
@@ -96,7 +102,7 @@ backend.post('/posts', upload.single('image'), async (req, res) => {
       image: req.file ? `/uploads/${req.file.filename}` : null,
     };
 
-    const response = await fetch('http://localhost:4000/posts', {
+    const response = await fetch(`${apiBaseUrl}/posts`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(postData),
@@ -119,12 +125,13 @@ backend.post('/posts/:id/edit', upload.single('image'), async (req, res) => {
       ...(req.file && { image: `/uploads/${req.file.filename}` }),
     };
 
-    await fetch(`http://localhost:4000/posts/${req.params.id}`, {
+    const response = await fetch(`${apiBaseUrl}/posts/${req.params.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedData),
     });
 
+    if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
     res.redirect('/admin');
   } catch (error) {
     console.error('Error editing post:', error);
@@ -135,7 +142,8 @@ backend.post('/posts/:id/edit', upload.single('image'), async (req, res) => {
 // Delete a post
 backend.post('/posts/:id/delete', async (req, res) => {
   try {
-    await fetch(`http://localhost:4000/posts/${req.params.id}`, { method: 'DELETE' });
+    const response = await fetch(`${apiBaseUrl}/posts/${req.params.id}`, { method: 'DELETE' });
+    if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
     res.redirect('/admin');
   } catch (error) {
     console.error('Error deleting post:', error);

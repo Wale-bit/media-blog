@@ -1,6 +1,7 @@
+
 {
   "scripts": {
-    "build:css": "tailwindcss -i ./public/styles/src/input.css -o ./public/styles/src/output.css --watch"
+    "start": "node api.js",
   },
   "type": "module",
   "dependencies": {
