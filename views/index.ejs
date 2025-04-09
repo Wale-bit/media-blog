@@ -26,15 +26,19 @@
 <!-- Main Content -->
 <main class="p-5 min-h-screen">
     <div class="bg-neutral-800 text-white rounded-2xl p-7 m-7">
-        <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <h1 class="text-4xl font-extrabold text-center pb-5">Latest Posts</h1>
+        <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <% if (Array.isArray(posts) && posts.length > 0) { %>
                 <% posts.forEach(post => { %>
-                    <li class="border border-neutral-700 p-5 rounded-lg shadow-md bg-neutral-900">
-                        <h2 class="text-2xl font-extrabold pb-3"><%= post.title %></h2>
-                        <p class="pb-3"><%= post.content %></p>
+                    <li class="border border-neutral-700 p-5 rounded-lg shadow-lg bg-neutral-900 hover:shadow-2xl transition duration-300 ease-in-out">
+                        <h2 class="text-2xl font-extrabold text-primary pb-3 truncate w-full" title="<%= post.title %>"><%= post.title %></h2>
+                        <p class="text-lg pb-3 text-gray-300 truncate h-24 overflow-hidden" title="<%= post.content %>"><%= post.content %></p>
                         <% if (post.image) { %>
-                            <img class="w-full h-48 object-cover rounded-md" src="<%= post.image %>" alt="Post Image">
+                            <img class="w-full h-48 object-cover rounded-md mb-4" src="<%= post.image %>" alt="Post Image" width="300" height="200">
                         <% } %>
+                        <div class="flex justify-between items-center">
+                            <a href="/post/<%= post.id %>" class="text-amber-400 hover:underline font-semibold text-sm">Read More</a>
+                        </div>
                     </li>
                 <% }) %>
             <% } else { %>
@@ -42,6 +46,7 @@
             <% } %>
         </ul>
     </div>
+    
 
     <!-- Pagination -->
     <div class="flex justify-center space-x-3 mt-5">

@@ -9,15 +9,16 @@ import pkg from 'pg';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
 const { Pool } = pkg;
+
+
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASS,
-  port: process.env.DB_PORT,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
+
 
 export default pool;
 
@@ -79,17 +80,14 @@ api.post('/posts', upload.single('image'), async (req, res) => {
   try {
     const { title, content } = req.body;
 
-    let base64Image = null;
+    let imagePath = null;
     if (req.file) {
-      const filePath = path.join(uploadDir, req.file.filename);
-      const fileBuffer = fs.readFileSync(filePath);
-      base64Image = fileBuffer.toString('base64');
-      fs.unlinkSync(filePath); // Optionally delete the file after converting to Base64
+      imagePath = `/uploads/${req.file.filename}`; // The image will be stored in the 'uploads' folder
     }
 
     const result = await pool.query(
       'INSERT INTO posts (title, content, image) VALUES ($1, $2, $3) RETURNING *',
-      [title, content, base64Image]
+      [title, content, imagePath]
     );
 
     res.status(201).json({ message: 'Post created successfully', post: result.rows[0] });

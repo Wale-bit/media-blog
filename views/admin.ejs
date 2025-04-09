@@ -36,8 +36,8 @@
                   <h2 class="font-bold text-3xl pb-5 pt-5"><%= post.title %></h2>
                   <p class="text-lg pb-5 pt-5"><%= post.content %></p>
                   <% if (post.image) { %>
-                    <img class="w-full" src="data:image/jpeg;base64,<%= post.image %>" alt="Post Image" width="200">
-                <% } %>
+                    <img class="w-full h-200" src="<%= post.image %>" alt="Post Image" width="200" height="200">
+                  <% } %>
                   <form action="/posts" method="POST" enctype="multipart/form-data" class="flex flex-col items-center">
                     <input type="text" class="border rounded-lg relative px-2 py-3 mb-5 w-full" name="title" value="<%= post.title %>" required>
                     <textarea name="content" class="border rounded-lg relative px-2 py-3 mb-5 w-full h-full" required><%= post.content %></textarea>

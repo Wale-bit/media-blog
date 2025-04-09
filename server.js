@@ -23,13 +23,15 @@ const backendPort = 3000;
 backend.set('view engine', 'ejs');
 backend.use(bodyParser.urlencoded({ extended: true }));
 backend.use(express.static('public'));
-backend.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+backend.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+console.log('Serving /uploads from:', path.join(__dirname, 'uploads'));
+
 backend.use(methodOverride('_method'));
 
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(process.cwd(), 'uploads');
+    const uploadPath = path.join(__dirname, 'uploads'); // ✅ consistent with .use()
     console.log('Uploading file to:', uploadPath);
     cb(null, uploadPath);
   },
@@ -42,7 +44,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Use API_BASE_URL from environment variables
-const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:4000';
+const apiBaseUrl = process.env.API_BASE_URL || '4000';
 
 // Routes
 
@@ -109,6 +111,7 @@ backend.post('/posts', upload.single('image'), async (req, res) => {
     });
 
     if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+    
     res.redirect('/admin');
   } catch (error) {
     console.error('Error creating post:', error);

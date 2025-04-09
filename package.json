@@ -1,7 +1,6 @@
-
 {
   "scripts": {
-    "start": "node api.js",
+    "start": "node api.js"
   },
   "type": "module",
   "dependencies": {
