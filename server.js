@@ -17,7 +17,7 @@ const __dirname = path.dirname(__filename);
 
 // Initialize Express app
 const backend = express();
-const backendPort = 3000;
+const backendPort = process.env.port;
 
 // Middleware setup
 backend.set('view engine', 'ejs');
@@ -44,7 +44,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Use API_BASE_URL from environment variables
-const apiBaseUrl = process.env.API_BASE_URL || '4000';
+const apiBaseUrl = process.env.API_BASE_URL;
 
 // Routes
 
